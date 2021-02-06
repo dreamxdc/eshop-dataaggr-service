@@ -91,19 +91,19 @@ public class AggrDataChangeQueueReceiver {
     	Long id = messageJSONObject.getLong("id");  
     	
     	Jedis jedis = jedisPool.getResource();
-    	//从redis批量获取mget
-    	List<String> results = jedis.mget("product_" + id, "product_property_" + id, "product_specification_" + id);
-    	String productDataJSON = results.get(0);
-    	
+    	//从redis批量获取mget,在线上部署先不用
+//    	List<String> results = jedis.mget("product_" + id, "product_property_" + id, "product_specification_" + id);
+//    	String productDataJSON = results.get(0);
+    	String productDataJSON = jedis.get("product_" + id);
     	if(productDataJSON != null && !"".equals(productDataJSON)) {
     		JSONObject productDataJSONObject = JSONObject.parseObject(productDataJSON);
-    		
-    		String productPropertyDataJSON =  results.get(1);
+    		String productPropertyDataJSON = jedis.get("product_property_" + id);
+//    		String productPropertyDataJSON =  results.get(1);
     		if(productPropertyDataJSON != null && !"".equals(productPropertyDataJSON)) {
     			productDataJSONObject.put("product_property", JSONObject.parse(productPropertyDataJSON));
     		} 
-    		
-    		String productSpecificationDataJSON = results.get(2);;
+    		String productSpecificationDataJSON = jedis.get("product_specification_" + id);
+//    		String productSpecificationDataJSON = results.get(2);;
     		if(productSpecificationDataJSON != null && !"".equals(productSpecificationDataJSON)) {
     			productDataJSONObject.put("product_specification", JSONObject.parse(productSpecificationDataJSON));
     		}
