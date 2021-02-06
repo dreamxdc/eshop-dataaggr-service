@@ -1,0 +1,22 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.25.64:8761/eureka/
+      
+server:
+  port: 8766
+  
+spring:
+  application:
+    name: eshop-dataaggr-service
+  datasource: 
+    type: com.alibaba.druid.pool.DruidDataSource
+    platform: mysql
+    url: jdbc:mysql://192.168.25.62:3306/eshop
+    username: root
+    password: root
+  rabbitmq:
+    host: 192.168.25.60
+    port: 5672  
+    username: rabbitadmin  
+    password: 123456
